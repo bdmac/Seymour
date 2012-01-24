@@ -15,6 +15,10 @@ require "seymour/channels/feed"
 require "seymour/distributors/immediate"
 require "seymour/distributors/resque"
 
+if defined?(Rails)
+  require "seymour/railtie"
+end
+
 module Seymour
   extend self
   

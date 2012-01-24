@@ -33,6 +33,7 @@ module Seymour
       RUBY
     end
 
+    option :activity_directory, default: 'app/models/activities'
     option :activity_collection, default: :activities
     option :distribution, default: :resque
     option :resque_queue, default: :activities

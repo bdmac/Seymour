@@ -1,5 +1,5 @@
 module Activities
   class Activity
-    include Seymour::ActivityDocument
+    include ::Seymour::ActivityDocument
   end
 end

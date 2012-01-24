@@ -4,9 +4,6 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 MODELS = File.join(File.dirname(__FILE__), "models")
 $LOAD_PATH.unshift(MODELS)
 
-ACTIVITIES = File.join(File.dirname(__FILE__), "models/activities")
-$LOAD_PATH.unshift(ACTIVITIES)
-
 require 'seymour'
 require 'mongoid'
 require 'rspec'
