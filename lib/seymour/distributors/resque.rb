@@ -13,7 +13,7 @@ module Seymour
       end
 
       def self.distribute(activity, channel_options = {})
-        ::Resque.enqueue(self.class, activity.id.to_s, serialize(channel_options, activity))
+        ::Resque.enqueue(self, activity.id.to_s, serialize(channel_options, activity))
       end
 
     protected
