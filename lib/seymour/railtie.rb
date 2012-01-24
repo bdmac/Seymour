@@ -23,13 +23,11 @@ module Rails #:nodoc:
       # environments.
       initializer "preload all activity models" do |app|
         config.to_prepare do
-          puts "********************* Loading all Seymour activities"
           ::Rails::Seymour::Railtie.load_activities
         end
       end
 
       def self.load_activities
-        puts "***** load_activities"
         if path = ::Seymour::Config.activity_directory
           Dir.glob("#{path}/**/*.rb").sort.each do |file|
             load_model(file.gsub(".rb", ""))
@@ -38,7 +36,6 @@ module Rails #:nodoc:
       end
 
       def self.load_model(file)
-        puts "***** Loading file #{file}"
         require_dependency(file)
       end
     end
