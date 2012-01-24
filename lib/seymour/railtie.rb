@@ -1,7 +1,6 @@
 require "seymour"
 require "seymour/config"
 require "rails"
-require "rails/seymour"
 
 module Rails #:nodoc:
   module Mongoid #:nodoc:
