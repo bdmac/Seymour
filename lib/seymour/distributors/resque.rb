@@ -9,7 +9,7 @@ module Seymour
       end
 
       def self.distribute(activity, channel_options = {})
-        Resque.enque(Seymour::Distributions::Resque, activity.id.to_s, channel_options)
+        Resque.enque(Seymour::Distributors::Resque, activity.id.to_s, channel_options)
       end
     end
   end

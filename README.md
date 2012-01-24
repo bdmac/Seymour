@@ -45,17 +45,22 @@ all Activities can be stored in a single mongodb collection and so that we can m
 activity items based on class name (e.g. `render @actvities` would work and find the appropriate partials for
 each type of Activity).
 
-
 Here is an example of a minimal base Seymour Activity should you want to define your own.
 
 ``` ruby
 class Activities::Activity
-	include Seymour::ActivityDocument
+  include Seymour::ActivityDocument
 end
 ```
 
-You can name your Activity class anything that works for you.  You must include Seymour::ActivityDocument in your base Activity
-(which automatically sets Mongoid up for you).
+If you define your own Activity base class you must let Seymour know about it during configuration.
+
+``` ruby
+# In your seymour.rb initializer
+Seymour.configure do |config|
+  config.base_activity_class = 'My::Activity::Class'
+end
+```
 
 You would then setup subclasses of your base Activity to define your activities.
 
@@ -227,6 +232,10 @@ actor.publish_activity(:new_comment, object: comment, target: post, feed: {recip
 ```
 
 This would prevent any feed items from being created for this activity and email the actor about the activity.
+
+### Reading the Feed
+
+TODO
 
 ## Contributing
 

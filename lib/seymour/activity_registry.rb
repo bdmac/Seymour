@@ -27,7 +27,7 @@ module Seymour
       verb = verb_for(klass)
       registry[verb] = klass
       klass.descendants.each do |descendant|
-          registry[verb_for(descendant)] = descendant
+        registry[verb_for(descendant)] = descendant
       end
       verb
     end
