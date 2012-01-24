@@ -19,7 +19,7 @@ module Seymour
       end
     end
 
-    dsl_methods :actor, :object, :target
+    dsl_methods :actor, :object, :activity_target
 
     # Configures the default channel options to deliver Activity to.
     #

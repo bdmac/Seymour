@@ -19,7 +19,7 @@ describe Seymour::Models::Activity do
       Activities::Activity.should respond_to(:define_object)
     end
     it 'responding to #define_target' do
-      Activities::Activity.should respond_to(:define_target)
+      Activities::Activity.should respond_to(:define_activity_target)
     end
     it 'responding to #deliver_to' do
       Activities::Activity.should respond_to(:deliver_to)

@@ -69,7 +69,7 @@ class Activities::NewComment < Activities::Activity
   register_activity
   define_actor  :comment_author, cache: [:full_name, :slug]
   define_object :comment, cache: [:content], required: true
-  define_target :post, cache: [:title, :slug], class: Post
+  define_activity_target :post, cache: [:title, :slug], class: Post
   
   deliver_to :feed, recipients: -> activity {activity.comment_author.followers}
 end
@@ -153,7 +153,7 @@ class Activities::NewComment < Activities::Activity
   register_activity
   define_actor  :comment_author, cache: [:full_name, :slug]
   define_object :comment, cache: [:content], required: true
-  define_target :post, cache: [:title, :slug], class: Post
+  define_activity_target :post, cache: [:title, :slug], class: Post
   
   # Configure delivery channels
   deliver_to :feed, recipients: -> activity {activity.comment_author.followers}
@@ -218,7 +218,7 @@ Just make sure you include the Seymour::Actor module to give it the appropriate 
 Wherever appropriate for your app (controller, observer, model callback, etc.):
 
 ``` ruby
-actor.publish_activity(:new_comment, object: comment, target: post)
+actor.publish_activity(:new_comment, object: comment, activity_target: post)
 ```
 
 This will use the configured distribution system to begin delivering the activity.  Typically this will be some sort of background
@@ -228,7 +228,7 @@ to deliver the Activity as it is configured.
 Remember, the recipients for any delivery channel can be overridden in the call to publish_activity:
 
 ``` ruby
-actor.publish_activity(:new_comment, object: comment, target: post, feed: {recipients: []}, email: {recipients: actor})
+actor.publish_activity(:new_comment, object: comment, activity_target: post, feed: {recipients: []}, email: {recipients: actor})
 ```
 
 This would prevent any feed items from being created for this activity and email the actor about the activity.

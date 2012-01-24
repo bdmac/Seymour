@@ -44,11 +44,11 @@ module Seymour
       # appropriate aliases.
       field :actor,       type: Element
       field :object,      type: Element
-      field :target,      type: Element
+      field :activity_target,      type: Element
           
       index [['actor._id', Mongo::ASCENDING], ['actor._type', Mongo::ASCENDING]]
       index [['object._id', Mongo::ASCENDING], ['object._type', Mongo::ASCENDING]]
-      index [['target._id', Mongo::ASCENDING], ['target._type', Mongo::ASCENDING]]
+      index [['activity_target._id', Mongo::ASCENDING], ['activity_target._type', Mongo::ASCENDING]]
           
       validates_presence_of :actor
       before_save :assign_data
@@ -65,8 +65,8 @@ module Seymour
       # @return [Seymour::ActivityDocument] An Activity instance with data
       def publish!(options = {})
         @activity_keys ||= begin
-          activity_keys = [:actor, :object, :target]
-          [:actor, :object, :target].each do |type|
+          activity_keys = [:actor, :object, :activity_target]
+          [:actor, :object, :activity_target].each do |type|
             activity_keys << send("defined_#{type}".to_sym).try(:[],:alias)
           end
           activity_keys.compact!
@@ -166,7 +166,7 @@ module Seymour
     end
       
     def assign_data
-      [:actor, :object, :target].each do |type|
+      [:actor, :object, :activity_target].each do |type|
         next unless object = load_instance(type)
         unless type_def = self.class.send("defined_#{type}".to_sym)
           # If we hit an unconfigured Activity element, nuke it so we don't try saving
