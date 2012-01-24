@@ -9,19 +9,19 @@ describe Seymour::Distribution do
     end
 
     it 'uses the default distributor' do
-      Seymour::Distribution.distributor.should == Seymour::Distribution::Immediate
+      Seymour::Distribution.distributor.should == Seymour::Distributors::Immediate
     end
 
     it 'uses the configured distributor' do
       Seymour::Config.distribution = :resque
-      Seymour::Distribution.distributor.should == Seymour::Distribution::Resque
+      Seymour::Distribution.distributor.should == Seymour::Distributors::Resque
     end
   end
 
   describe '#distribute' do
     it 'calls distribute on the configured distributor with the activity and specified channel options' do
       channel_options = stub
-      Seymour::Distribution::Immediate.should_receive(:distribute).with(activity, channel_options)
+      Seymour::Distributors::Immediate.should_receive(:distribute).with(activity, channel_options)
       Seymour::Distribution.distribute(activity, channel_options)
     end
   end

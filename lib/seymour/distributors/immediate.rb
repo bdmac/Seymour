@@ -1,8 +1,6 @@
-require "seymour/distributions/base"
-
 module Seymour
-  module Distribution
-    class Immediate < Base
+  module Distributors
+    class Immediate
       def self.distribute(activity, channel_options = {})
         Seymour::Channels.channels(channel_options).each do |channel|
           channel.deliver(activity)

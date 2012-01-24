@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Seymour::Distribution::Immediate do
+describe Seymour::Distributors::Immediate do
   let(:distributor) { described_class }
   let(:user) { User.create(full_name: "Brian McManus") }
   let(:activity) {Activities::NewPost.new}

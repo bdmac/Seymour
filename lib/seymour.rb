@@ -12,9 +12,8 @@ require "seymour/distribution"
 require "seymour/channels"
 require "seymour/channels/base"
 require "seymour/channels/feed"
-require "seymour/distributions/base"
-require "seymour/distributions/immediate"
-require "seymour/distributions/resque"
+require "seymour/distributors/immediate"
+require "seymour/distributors/resque"
 
 module Seymour
   extend self

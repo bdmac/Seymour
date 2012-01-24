@@ -12,9 +12,9 @@ module Seymour
     # @raise [ Seymour::InvalidDistribution ] If the configured Distributor class is not valid.
     def distributor
       begin
-        @distributor || Seymour::Distribution.const_get(Seymour::Config.distribution.to_s.split("_").map {|p| p.capitalize}.join(""))
+        @distributor || Seymour::Distributors.const_get(Seymour::Config.distribution.to_s.split("_").map {|p| p.capitalize}.join(""))
       rescue NameError
-        raise Seymour::InvalidDistribution(Seymour::Config.distribution)
+        raise Seymour::InvalidDistribution.new(Seymour::Config.distribution)
       end
     end
 

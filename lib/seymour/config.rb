@@ -34,7 +34,7 @@ module Seymour
     end
 
     option :activity_collection, default: :activities
-    option :distribution, default: :immediate
+    option :distribution, default: :resque
     option :channels, default: [:feed]
     option :base_activity_class, default: 'Seymour::Models::Activity'
     option :base_feed_class, default: 'Seymour::Models::Feed'

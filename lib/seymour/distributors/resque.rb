@@ -1,8 +1,6 @@
-require "seymour/distributions/base"
-
 module Seymour
-  module Distribution
-    class Resque < Base
+  module Distributors
+    class Resque
       def self.perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
         Seymour::Channels.channels(channel_options).each do |channel|
