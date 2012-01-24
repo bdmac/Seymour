@@ -132,9 +132,20 @@ end
 
 # In your seymour.rb initializer
 Seymour.configure do |config|
-    config.distribution = :delayed_job
+  config.distribution = :delayed_job
 end
 ```
+
+#### Important Performance Note (Resque)
+
+If using Resque as your distributor it is highly recommended that you provide a method on your Activity classes to define their recipients and
+use a symbol as the value for the channel recipients option.
+
+Anything passed to Resque for backgrounding must be serializable.  If you provide a proc or an array of Actors as a channel's recipients
+then prior to backgrounding the distribution Seymour must first do extra work to convert the recipients into a format that can be deserialized
+later.  This will slow down distribution which somewhat defeats the purpose of using a background distribution method.
+
+Providing a symbol to be called on your Activity bypasses this problem since the symbol can be directly serialized without any additional overhead.
 
 ### Delivery (Channels)
 
@@ -156,20 +167,26 @@ class Activities::NewComment < Activities::Activity
   define_activity_target :post, cache: [:title, :slug], class: Post
   
   # Configure delivery channels
-  deliver_to :feed, recipients: -> activity {activity.comment_author.followers}
+  deliver_to :feed, recipients: :recipients
+
+  def recipients
+    comment_author.followers
+  end
 end
 ```
 
 The first parameter to deliver_to is the name of the channel.  Channel names must be unique and must match a known channel in the Seymour::Channels
 namespace.  The Channel name for the Feed channel would be :feed.
 
-Additionally, default recipients can be specified for a distribution channel by providing a proc that returns an array of Actors that
-should receive the Activity via that channel.  The proc will receive the Activity being delivered as its sole argument.
+Additionally, default recipients can be specified for a distribution channel.  The following are acceptable values for the recipients option:
+* _Callable:_ A callable (proc/lambda/method).  The callable will receive the activity as its sole argument.  It should return an array of Actors.
+* _Symbol:_ A symbol to be called on the Activity instance that will return the appropriate recipients.  It should return an array of Actors.
+* _Array:_ An array of Actors.
 
 Recipients can be overridden when publishing an activity (see Publishing Activities below).  If no default recipients are specified then it is expected that they are
 provided as a parameter to publishing.
 
-Additionaly options may also be available depending on the specific delivery channel.
+Additional options may also be available depending on the specific delivery channel.
 
 Adding additional delivery channels to Seymour is easy.
 
