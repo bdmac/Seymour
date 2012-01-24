@@ -16,25 +16,26 @@ module Seymour
     class Element < Hash
       include Mongoid::Fields::Serializable
 
-      def deserialize(object)
-        #[ object["x"], object["y"] ]
-        if object.kind_of? Hash
-          object = Element.new.replace(object)
-        end
-        object
-      end
-
-      def method_missing(meth, *args, &block)
-        if key?(meth.to_s)
-          return self[meth.to_s]
-        else
-          @model ||= self['_type'].to_s.camelcase.constantize.find(self['_id'])
-          if @model && @model.respond_to?(meth)
-            return @model.send(meth, *args, &block)
+      class ElementHash < Hash
+        def method_missing(meth, *args, &block)
+          if key?(meth.to_s)
+            return self[meth.to_s]
           else
-            super
+            @model ||= self['_type'].to_s.camelcase.constantize.find(self['_id'])
+            if @model && @model.respond_to?(meth)
+              return @model.send(meth, *args, &block)
+            else
+              super
+            end
           end
         end
+      end
+
+      def deserialize(object)
+        if object.kind_of? Hash
+          object = ElementHash.new.replace(object)
+        end
+        object
       end
     end
 

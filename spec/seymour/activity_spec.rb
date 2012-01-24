@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Seymour::Models::Activity do
-  let(:user) { User.create(full_name: "Brian McManus") }
+  let(:user) { User.create(full_name: "Brian McManus", name: "Brian") }
 
   # TODO Should be a better way of ensuring this happens...
   it 'registers the activity class' do
@@ -66,5 +66,13 @@ describe Seymour::Models::Activity do
     activity = Activities::NewPost.create(actor: user)
     activity.reload
     activity.actor.followers.should == User.all
+  end
+
+  it 'allows direct access to cached name' do
+    post = Post.create(title: "Some Title")
+    comment = post.comments.create(content: "A comment")
+    like = comment.likes.create
+    activity = Activities::NewLike.create(liker: user, like: like, comment: comment)
+    activity.liker.name == 'Brian'
   end
 end

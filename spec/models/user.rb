@@ -3,6 +3,7 @@ class User
   include Seymour::Actor
   
   field :full_name
+  field :name
   field :slug
 
   def followers
