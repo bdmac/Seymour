@@ -234,3 +234,8 @@ This would prevent any feed items from being created for this activity and email
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Inspiration
+
+Seymour was originally inspired by the [Streama Gem](https://github.com/christospappas/streama).  Streama did not quite work for my
+needs though so I began work on this gem instead.  Many of the core concepts are inspired by Streama.
