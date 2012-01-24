@@ -3,7 +3,7 @@ require "seymour/config"
 require "rails"
 
 module Rails #:nodoc:
-  module Mongoid #:nodoc:
+  module Seymour #:nodoc:
     class Railtie < Rails::Railtie #:nodoc:
 
       # Exposes Seymour's configuration to the Rails application configuration.
@@ -24,7 +24,7 @@ module Rails #:nodoc:
       initializer "preload all activity models" do |app|
         config.to_prepare do
           puts "********************* Loading all Seymour activities"
-          load_activities
+          ::Rails::Seymour::Railtie.load_activities
         end
       end
 
