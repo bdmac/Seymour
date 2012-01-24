@@ -47,6 +47,7 @@ each type of Activity).
 
 
 Here is an example of a minimal base Seymour Activity should you want to define your own.
+
 ``` ruby
 class Activities::Activity
 	include Seymour::ActivityDocument
