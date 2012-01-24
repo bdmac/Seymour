@@ -61,4 +61,10 @@ describe Seymour::Models::Activity do
     activity = Activities::NewPost.create(actor: user)
     activity.actor.full_name == 'Brian McManus'
   end
+
+  it 'automatically loads the model if uncached call is made' do
+    activity = Activities::NewPost.create(actor: user)
+    activity.reload
+    activity.actor.followers.should == User.all
+  end
 end
