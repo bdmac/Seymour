@@ -1,8 +1,10 @@
 module Seymour
   module Distributors
     class Resque
-      @queue = :activities
-      
+      def self.queue
+        Seymour::Config.resque_queue
+      end
+
       def self.perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
         Seymour::Channels.channels(channel_options).each do |channel|
