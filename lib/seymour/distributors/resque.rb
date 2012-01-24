@@ -13,7 +13,7 @@ module Seymour
       end
 
       def self.distribute(activity, channel_options = {})
-        ::Resque.enqueue(Seymour::Distributors::Resque, activity.id.to_s, serialize(channel_options, activity))
+        ::Resque.enqueue(self.class, activity.id.to_s, serialize(channel_options, activity))
       end
 
     protected
@@ -41,7 +41,10 @@ module Seymour
         channel_options.symbolize_keys!
         channel_options.each do |channel_name, options|
           options.symbolize_keys!
-          next if options[:recipients].is_a?(Symbol)
+          if options[:recipients].respond_to?(:to_sym)
+            options[:recipients] = options[:recipients].to_sym
+            next
+          end
           recipients = options[:recipients]
           recipients = recipients.map do |recipient|
             if recipient.class.include?(Mongoid::Document)
