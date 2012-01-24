@@ -46,7 +46,8 @@ module Seymour
       else
         # Attempt to auto-register an Activity class
         begin
-          return register(verb.to_s.camelcase.constantize)
+          register(verb.to_s.camelcase.constantize)
+          return registry[verb]
         rescue NameError
           raise Seymour::InvalidActivity, "Unable to locate a registered Activity for #{verb}"
         end
