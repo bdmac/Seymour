@@ -28,7 +28,7 @@ module Rails #:nodoc:
         end
       end
 
-      def load_activities
+      def self.load_activities
         puts "***** load_activities"
         if path = ::Seymour::Config.activity_directory
           Dir.glob("#{path}/**/*.rb").sort.each do |file|
@@ -37,7 +37,7 @@ module Rails #:nodoc:
         end
       end
 
-      def load_model(file)
+      def self.load_model(file)
         puts "***** Loading file #{file}"
         require_dependency(file)
       end
