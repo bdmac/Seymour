@@ -41,7 +41,16 @@ module Seymour
     #
     # @return [ Class ] The Activity class for the provided verb.
     def find(verb)
-      registry[verb] or raise Seymour::InvalidActivity, "Unable to locate a registered Activity for #{verb}"
+      if klass = registry[verb]
+        return klass
+      else
+        # Attempt to auto-register an Activity class
+        begin
+          return register(verb.to_s.camelcase.constantize)
+        rescue NameError
+          raise Seymour::InvalidActivity, "Unable to locate a registered Activity for #{verb}"
+        end
+      end
     end
   
     # Symbolizes an Activity class to use as a key in the registry.  Removes any namespace
