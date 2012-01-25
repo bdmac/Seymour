@@ -35,6 +35,7 @@ module Seymour
 
     option :activity_directory, default: 'app/models/activities'
     option :activity_collection, default: :activities
+    option :feed_collection, default: :feeds
     option :distribution, default: :resque
     option :resque_queue, default: :activities
     option :channels, default: [:feed]
