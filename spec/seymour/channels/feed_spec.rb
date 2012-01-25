@@ -13,5 +13,15 @@ describe Seymour::Channels::Feed do
         recipient.incoming_activity_stream.count.should == 1
       end
     end
+
+    it "does not add the activity to the actor's feed" do
+      post = Post.create(title: "Super Post")
+      commenter = User.create(full_name: "Someone Else")
+      feed_options = {recipients: [commenter]}
+      activity = Activities::NewComment.create(actor: commenter, comment: Comment.create(post: post, user: commenter))
+      channel = Seymour::Channels::Feed.new(feed_options)
+      channel.deliver(activity)
+      commenter.incoming_activity_stream.should_not include(activity)
+    end
   end
 end

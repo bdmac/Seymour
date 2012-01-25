@@ -5,7 +5,7 @@ module Seymour
         recipients = recipients(activity)
         return unless recipients
         recipients.each do |recipient|
-          recipient.add_activity_to_feed!(activity)
+          recipient.add_activity_to_feed!(activity) unless recipient == activity.load_instance(:actor)
         end
       end
     end
