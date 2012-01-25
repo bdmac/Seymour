@@ -211,8 +211,16 @@ module Seymour
         end
         
         type_def[:cache].each do |field|
-          raise Seymour::InvalidField.new(field) unless object.respond_to?(field)
-          hash[field.to_s] = object.send(field)
+          if field.is_a?(Symbol)
+            raise Seymour::InvalidField.new(field) unless object.respond_to?(field)
+            hash[field.to_s] = object.send(field)
+          elsif field.is_a?(Hash)
+            key = field.first[0]
+            callable = field.first[1]
+            hash[key.to_s] = callable.call(object)
+          else
+            raise Seymour::InvalidField.new(field)
+          end
         end
 
         write_attribute(type, hash)      

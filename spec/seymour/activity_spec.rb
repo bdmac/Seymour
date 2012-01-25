@@ -75,4 +75,11 @@ describe Seymour::Models::Activity do
     activity = Activities::NewLike.create(liker: user, like: like, comment: comment)
     activity.liker.name == 'Brian'
   end
+
+  it 'caches values from a proc' do
+    post = Post.create(title: "Some Title", slug: 'some-title')
+    activity = Activities::NewPost.create(actor: user, post: post)
+    activity.reload
+    activity.post.slug.should == 'some-title'
+  end
 end
