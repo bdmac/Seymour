@@ -35,7 +35,7 @@ module Seymour
     #
     # @param [ Hash ] options Options for retrieving the Actor's activity stream.
     def incoming_activity_stream(options = {})
-      return [] unless feed
+      self.create_feed unless self.feed
       feed.feed_items(options)
     end
   
