@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Seymour::Models::Activity do
+describe Seymour::ActivityDocument do
   let(:user) { User.create(full_name: "Brian McManus", name: "Brian") }
 
   # TODO Should be a better way of ensuring this happens...
