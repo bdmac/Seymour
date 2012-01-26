@@ -82,4 +82,21 @@ describe Seymour::Models::Activity do
     activity.reload
     activity.post.slug.should == 'some-title'
   end
+
+  describe ".assign_data" do
+    before(:each) { Activities::NewPost.create(actor: user) }
+
+    it 'assigns data on create' do
+      activity = Activities::NewPost.new(actor: user)
+      activity.save
+      activity.actor.should be_a(Hash)
+    end
+
+    it 'does not assign_data on save if nothing changed' do
+      activity = Activities::Activity.last
+      activity.should_not_receive(:assign_data)
+      activity.load_instance(:actor)
+      activity.save
+    end
+  end
 end

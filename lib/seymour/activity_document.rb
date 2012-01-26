@@ -54,13 +54,17 @@ module Seymour
       field :actor,       type: Element
       field :object,      type: Element
       field :activity_target,      type: Element
+
+      attr_reader :actor_cache, :object_cache, :activity_target_cache
           
       index [['actor._id', Mongo::ASCENDING], ['actor._type', Mongo::ASCENDING]]
       index [['object._id', Mongo::ASCENDING], ['object._type', Mongo::ASCENDING]]
       index [['activity_target._id', Mongo::ASCENDING], ['activity_target._type', Mongo::ASCENDING]]
           
       validates_presence_of :actor
-      before_save :assign_data
+      # Only assign the data once automatically.  If you want to update it later you MUSt
+      # call .refresh_data manually.
+      before_save :assign_data_if_needed
       
       extend Seymour::DSL
       register_activity
@@ -122,32 +126,35 @@ module Seymour
     #
     # @return [Mongoid::Document] document A mongoid document instance
     def load_instance(type)
+      cache_key = "@#{type}_cache".to_sym
       data = self.send(type)
-      if data.is_a?(Hash)
-        model = nil
+      
+      if (instance = self.instance_variable_get(cache_key)) || !data.is_a?(Hash)
+        return instance || data
+      else
+        instance = nil
         if data['root_type'] && data['root_id'] && data['embed_path']
           # Trying to resurrect an embedded document.
           parent = data['root_type'].to_s.camelcase.constantize.find(data['root_id'])
           if parent
-            model = parent
+            instance = parent
             embed_paths = data['embed_path'].split('::')
             embed_paths.each do |path|
               parts = path.split(':')
               if parts.length == 2
-                model = model.send(parts[0]).find(parts[1])
+                instance = instance.send(parts[0]).find(parts[1])
               else
-                model = model.send(parts[0])
+                instance = instance.send(parts[0])
               end
             end
           end
         else
-          model = data['_type'].to_s.camelcase.constantize.find(data['_id'])
+          instance = data['_type'].to_s.camelcase.constantize.find(data['_id'])
         end
-        # Cache the model for future access...
-        self.send("#{type}=".to_sym, model)
-        model
-      else
-        data
+        # Cache the instance for future access...
+        self.instance_variable_set(cache_key, instance)
+        #self.send("#{type}=".to_sym, instance)
+        instance
       end
     end
 
@@ -172,6 +179,10 @@ module Seymour
 
     def channel_options(options = {})
       self.class.channel_options(options)
+    end
+
+    def assign_data_if_needed
+      assign_data if self.changed?
     end
       
     def assign_data
