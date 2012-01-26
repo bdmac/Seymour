@@ -28,7 +28,7 @@ module Rails #:nodoc:
       end
 
       def self.load_activities
-        if path = ::Seymour::Config.activity_directory
+        if (path = ::Seymour::Config.activity_directory) && !Rails.application.config.cache_classes
           Dir.glob("#{path}/**/*.rb").sort.each do |file|
             load_model(file.gsub(".rb", ""))
           end
