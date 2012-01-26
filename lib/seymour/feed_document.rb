@@ -15,6 +15,8 @@ module Seymour
           
       validates :owner, presence: true
       validates_uniqueness_of :owner_id
+
+      Seymour::Config.base_feed_class = self.name
     end    
   end
 end

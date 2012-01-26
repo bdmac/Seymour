@@ -40,7 +40,7 @@ module Seymour
     option :distribution, default: :resque
     option :resque_queue, default: :activities
     option :channels, default: [:feed]
-    option :base_activity_class, default: 'Activity'
-    option :base_feed_class, default: 'Feed'
+    option :base_activity_class, default: nil
+    option :base_feed_class, default: nil
   end
 end

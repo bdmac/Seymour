@@ -10,7 +10,6 @@ require 'rspec'
 
 Seymour.configure do |config|
   config.distribution = :immediate
-  config.base_activity_class = 'Activities::Activity'
 end
 
 LOGGER = Logger.new($stdout)

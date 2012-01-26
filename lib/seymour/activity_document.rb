@@ -67,6 +67,7 @@ module Seymour
       before_save :assign_data_if_needed
       
       extend Seymour::DSL
+      Seymour::Config.base_activity_class = self.name
       register_activity
     end
     
