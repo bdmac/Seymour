@@ -23,5 +23,14 @@ describe Seymour::Channels::Feed do
       channel.deliver(activity)
       commenter.incoming_activity_stream.should_not include(activity)
     end
+
+    it "raises invalid recipients unless the recipients respond to :each" do
+      feed_options = {recipients: 'BAD RECIPIENTS'}
+      activity = Activities::NewPost.create(actor: User.create(full_name: "Brian"), post: Post.create(title: "Something"))
+      channel = Seymour::Channels::Feed.new(feed_options)
+      expect {
+        channel.deliver(activity)
+      }.to raise_error(Seymour::InvalidRecipients)
+    end
   end
 end

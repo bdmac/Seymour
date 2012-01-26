@@ -39,4 +39,12 @@ module Seymour
       @message = "Invalid Field: #{message}"
     end
   end
+
+  class InvalidRecipients < SeymourError
+    attr_reader :message
+
+    def initialize klass
+      @message = "Invalid Recipients: #{klass}"
+    end
+  end
 end

@@ -21,6 +21,7 @@ module Seymour
         elsif recipients.is_a?(Symbol)
           recipients = activity.send(recipients)
         end
+        raise ::Seymour::InvalidRecipients.new(recipients.class) if recipients && !recipients.respond_to?(:each)
         recipients
       end
     end
