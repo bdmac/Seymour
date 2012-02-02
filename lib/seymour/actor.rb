@@ -4,6 +4,7 @@ module Seymour
 
     included do
       has_one :feed, as: :owner, class_name: Seymour::Config.base_feed_class, dependent: :delete
+      after_destroy :delete_activities
     end
 
     # Publishes an Activity type with the given options using this actor
@@ -44,6 +45,13 @@ module Seymour
     # @param [ Hash ] options Options for retrieving the Actor's activity stream.
     def outgoing_activity_stream(options = {})
       Seymour::Config.base_activity_class.camelcase.constantize.activities_by(self, options)
+    end
+    
+    protected
+    
+    # Destroy any activities by this actor.  Override with more performant version if desired.
+    def delete_activities
+      outgoing_activity_stream.destroy_all
     end
   end
 end

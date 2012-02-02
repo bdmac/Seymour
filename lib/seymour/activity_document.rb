@@ -62,9 +62,10 @@ module Seymour
       index [['activity_target._id', Mongo::ASCENDING], ['activity_target._type', Mongo::ASCENDING]]
           
       validates_presence_of :actor
-      # Only assign the data once automatically.  If you want to update it later you MUSt
+      # Only assign the data once automatically.  If you want to update it later you MUST
       # call .refresh_data manually.
       before_save :assign_data_if_needed
+      after_destroy :prune_feeds
       
       extend Seymour::DSL
       Seymour::Config.base_activity_class = self.name
@@ -237,6 +238,10 @@ module Seymour
 
         write_attribute(type, hash)      
       end
-    end      
+    end
+    
+    def prune_feeds
+      # No-op by default.  Implement in your Activity class if desired.
+    end    
   end
 end
