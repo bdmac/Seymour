@@ -13,7 +13,10 @@ module Seymour
       end
 
       def self.distribute(activity, channel_options = {})
-        ::Resque.enqueue(self, activity.id.to_s, serialize(channel_options, activity))
+        channel_options.each do |channel_name, options|
+          temp = {channel_name => options}
+          ::Resque.enqueue(self, activity.id.to_s, serialize(temp, activity))
+        end
       end
 
     protected
