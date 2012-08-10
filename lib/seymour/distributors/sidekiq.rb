@@ -1,11 +1,10 @@
 module Seymour
   module Distributors
-    class Resque
-      def self.queue
-        Seymour::Config.background_queue
-      end
+    class Sidekiq
+      include ::Sidekiq::Worker
+      sidekiq_options :queue => Seymour::Config.background_queue
 
-      def self.perform(activity_id, channel_options)
+      def perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
         Seymour::Channels.channels(deserialize(channel_options, activity)).each do |channel|
           channel.deliver(activity)
@@ -15,7 +14,7 @@ module Seymour
       def self.distribute(activity, channel_options = {})
         channel_options.each do |channel_name, options|
           temp = {channel_name => options}
-          ::Resque.enqueue(self, activity.id.to_s, serialize(temp, activity))
+          self.perform_async(activity.id.to_s, serialize(temp, activity))
         end
       end
     end

@@ -12,9 +12,14 @@ describe Seymour::Distribution do
       Seymour::Distribution.distributor.should == Seymour::Distributors::Immediate
     end
 
-    it 'uses the configured distributor' do
+    it 'uses the configured distributor when resque' do
       Seymour::Config.distribution = :resque
       Seymour::Distribution.distributor.should == Seymour::Distributors::Resque
+    end
+    
+    it 'uses the configured distributor when sidekiq' do
+      Seymour::Config.distribution = :sidekiq
+      Seymour::Distribution.distributor.should == Seymour::Distributors::Sidekiq
     end
   end
 

@@ -13,6 +13,10 @@ require "seymour/channels/feed"
 require "seymour/distributors/immediate"
 require "seymour/distributors/resque"
 
+if defined?(::Sidekiq)
+  require "seymour/distributors/sidekiq"
+end
+
 if defined?(Rails)
   require "seymour/railtie"
 end
