@@ -104,8 +104,8 @@ Activities fully support storing embedded documents as Activity elements.
 
 ### Distribution
 
-Seymour supports a flexible Activity distribution mechansim.  There are three distributors included with Seymour:  `Seymour::Distributors::Immediate`
-, `Seymour::Distributors::Resque`, and `Seymour::Distributors::Sidekiq`.
+Seymour supports a flexible Activity distribution mechansim.  There are three distributors included with Seymour:  `Seymour::Distributors::Immediate`,
+`Seymour::Distributors::Resque`, and `Seymour::Distributors::Sidekiq`.
 
 Immediate distribution does what it sounds like.  It immediately distributes the Activity across all configured channels.  This will block
 your application and is really not recommended for anything but testing purposes or the simplest of installations.
