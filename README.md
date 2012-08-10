@@ -14,7 +14,7 @@ refining the feed, it simply distributes activities to appropriate parties via d
 
 Seymour supports several distribution mechanisms for delivering activities to recipients.  Activities _can_ be distributed
 immediately if desired but this is __not recommended__ for anything but testing.  You will want to configure a background
-processor to handle activity distribution. Out of the box Seymour supports resque for activity distribution but other 
+processor to handle activity distribution. Out of the box Seymour supports resque and sidekiq for activity distribution but other 
 systems (e.g. DelayedJob) could easily be added and used.
 
 ## Installation
@@ -104,16 +104,16 @@ Activities fully support storing embedded documents as Activity elements.
 
 ### Distribution
 
-Seymour supports a flexible Activity distribution mechansim.  There are two distributors included with Seymour:  `Seymour::Distribution::Immediate`
-and `Seymour::Distribution::Resque`.
+Seymour supports a flexible Activity distribution mechansim.  There are three distributors included with Seymour:  `Seymour::Distributors::Immediate`
+, `Seymour::Distributors::Resque`, and `Seymour::Distributors::Sidekiq`.
 
 Immediate distribution does what it sounds like.  It immediately distributes the Activity across all configured channels.  This will block
 your application and is really not recommended for anything but testing purposes or the simplest of installations.
 
-Resque distribution will offload distribution onto your background resque queue thus allowing your application to continue responding to requests.
-This is the preferred default distribution mechanism.
+Resque and Sidekiq distribution will offload distribution onto a background queue thus allowing your application to continue responding to requests.
+One of these is the preferred default distribution mechanism.
 
-If neither of these distribution mechanisms are suitable for your application you can easily add and use your own distributor.  You simply define
+If none of these distribution mechanisms are suitable for your application you can easily add and use your own distributor.  You simply define
 a new class in Seymour::Distributors that responds to `distribute(activity, channel_options = {})` and configure Seymour to use it.
 
 ``` ruby
@@ -136,12 +136,12 @@ Seymour.configure do |config|
 end
 ```
 
-#### Important Performance Note (Resque)
+#### Important Performance Note (Resque and Sidekiq)
 
-If using Resque as your distributor it is highly recommended that you provide a method on your Activity classes to define their recipients and
+If using Resque or Sidekiq as your distributor it is highly recommended that you provide a ruby method on your Activity classes to define their recipients and
 use a symbol as the value for the channel recipients option.
 
-Anything passed to Resque for backgrounding must be serializable.  If you provide a proc or an array of Actors as a channel's recipients
+Anything passed to Resque/Sidekiq for backgrounding must be _serializable_.  If you provide a proc or an array of Actors as a channel's recipients
 then prior to backgrounding the distribution Seymour must first do extra work to convert the recipients into a format that can be deserialized
 later.  This will slow down distribution which somewhat defeats the purpose of using a background distribution method.
 
