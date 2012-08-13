@@ -2,7 +2,7 @@ module Seymour
   module Distributors
     class Sidekiq < Background
       include ::Sidekiq::Worker
-      sidekiq_options :queue => Seymour::Config.background_queue
+      sidekiq_options :queue => Seymour::Config.background_queue, :retry => false
 
       def perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
