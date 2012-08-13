@@ -6,7 +6,7 @@ module Seymour
 
       def perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
-        Seymour::Channels.channels(Seymour::Distributors::Sidekiq.deserialize(channel_options, activity)).each do |channel|
+        Seymour::Channels.channels(Seymour::Distributors::Background.deserialize(channel_options, activity)).each do |channel|
           channel.deliver(activity)
         end
       end

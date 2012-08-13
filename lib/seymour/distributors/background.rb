@@ -1,9 +1,7 @@
 module Seymour
   module Distributors
     class Background
-      
-    protected
-      
+            
       def self.serialize(channel_options, activity)
         channel_options.each do |channel_name, options|
           next if options[:recipients].is_a?(Symbol)
