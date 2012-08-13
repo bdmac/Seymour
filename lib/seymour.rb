@@ -11,15 +11,10 @@ require "seymour/channels"
 require "seymour/channels/base"
 require "seymour/channels/feed"
 require "seymour/distributors/immediate"
+require "seymour/distributors/background"
 require "seymour/distributors/resque"
-
-if defined?(::Sidekiq)
-  require "seymour/distributors/sidekiq"
-end
-
-if defined?(Rails)
-  require "seymour/railtie"
-end
+require "seymour/distributors/sidekiq" if defined?(::Sidekiq)
+require "seymour/railtie" if defined?(Rails)
 
 module Seymour
   extend self

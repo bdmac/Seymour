@@ -1,6 +1,6 @@
 module Seymour
   module Distributors
-    class Resque
+    class Resque < Background
       def self.queue
         Seymour::Config.background_queue
       end

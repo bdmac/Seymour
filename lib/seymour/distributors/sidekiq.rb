@@ -1,12 +1,12 @@
 module Seymour
   module Distributors
-    class Sidekiq
+    class Sidekiq < Background
       include ::Sidekiq::Worker
       sidekiq_options :queue => Seymour::Config.background_queue
 
       def perform(activity_id, channel_options)
         activity = Seymour::Config.base_activity_class.camelcase.constantize.find(activity_id)
-        Seymour::Channels.channels(deserialize(channel_options, activity)).each do |channel|
+        Seymour::Channels.channels(Seymour::Distributors::Sidekiq.deserialize(channel_options, activity)).each do |channel|
           channel.deliver(activity)
         end
       end
