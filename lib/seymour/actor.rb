@@ -29,7 +29,7 @@ module Seymour
     # @param [ Seymour::ActivityDocument ] An Activity instance to add to this Actor's feed.
     def add_activity_to_feed!(activity)
       self.create_feed unless self.feed
-      self.feed.feed_items << activity
+      self.feed.add_to_set(:feed_item_ids, activity.id)
     end
 
     # Fetch the incoming activities for this Actor.
